@@ -1,0 +1,1 @@
+   <input type="email" value="<?= $_SESSION['user']['email'] ?>" class="form-control" id="registerEmail" placeholder="Enter your email" name="email" readonly>

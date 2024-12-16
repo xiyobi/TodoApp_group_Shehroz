@@ -53,7 +53,7 @@ class User
         if ($stmt->rowCount() > 0) {
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
-        return false;
+            return false;
     }
 
     public function getUserById(int $id): mixed
@@ -77,3 +77,4 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
+

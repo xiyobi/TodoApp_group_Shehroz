@@ -6,3 +6,6 @@ $todos = (new \App\Todo())->getAllTodos($_SESSION['user']['id']);
 view('todos',[
     'todos'=>$todos
 ]);
+
+
+

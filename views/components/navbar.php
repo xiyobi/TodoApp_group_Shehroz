@@ -25,6 +25,7 @@ require 'views/components/header.php';
                             <li><a class="dropdown-item" href="/todos"><?= $_SESSION['user']['full_name'] ?? '' ?></a></li>
                             <li><a class="dropdown-item" href="/todos">To-do List</a></li>
                             <li><a class="dropdown-item"  href="/logout" >log out</a></li>
+                            <li><a class="dropdown-item"  href="/DeleteAccount" >Delete Account</a></li>
                         </ul>
                     </li>
                 <?php

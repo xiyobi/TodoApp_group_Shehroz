@@ -1,4 +1,4 @@
 <?php
-/** @var TYPE_NAME $todoId */
-(new \App\Todo())->destroy($todoId);
+/**@var $todoId \App\Todo */
+$todo=(new \App\Todo())->destory($todoId);
 redirect('/todos');

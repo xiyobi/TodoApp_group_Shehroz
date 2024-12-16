@@ -1,12 +1,20 @@
 <?php
 
+use JetBrains\PhpStorm\NoReturn;
 
-function view (string $page, array $data = []): void
+function view($page, $data = [])
 {
     extract($data);
-    require 'views/' . $page . '.php';
+    require 'views/'.$page. '.php';
+}
+function redirect(string $url){
+    header("Location: $url");
+    exit();
 }
 
-function redirect($url){
-    header("Location: $url");
+#[NoReturn] function apiResponse($data): void
+{
+    header("Content-Type: application/json");
+    echo json_encode($data);
+    exit();
 }

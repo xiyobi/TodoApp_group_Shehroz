@@ -1,6 +1,6 @@
 <?php
-/** @var TYPE_NAME $todoId */
+/**@var $todoId \App\Todo */
 $getTodo = (new \App\Todo())->getTodo($todoId);
-view('edit', [
+view('edit',[
     'todo'=>$getTodo
 ]);

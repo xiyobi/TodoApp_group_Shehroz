@@ -7,6 +7,7 @@ if (!empty($_POST['full_name']) && !empty($_POST['email']) && !empty($_POST['pas
     }
 
     $user = (new \App\User())->register($_POST['full_name'], $_POST['email'], $_POST['password']);
+    
     if ($user) {
         unset($_SESSION['error_message']);
         unset($_SESSION['password']);
@@ -17,3 +18,30 @@ if (!empty($_POST['full_name']) && !empty($_POST['email']) && !empty($_POST['pas
     $_SESSION['error_message'] = 'Email already exists';
     redirect('/register');
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

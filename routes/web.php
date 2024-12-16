@@ -17,6 +17,7 @@ $router->post('/login',fn()=>require 'controllers/loginUsersController.php');
 
 $router->get('/DeleteAccount',fn()=>view('DeleteAccount'));
 
+$router->post('/deleteAccount',fn()=> require 'controllers/deleteUserController.php');
 
 $router->get('/',fn()=>require 'controllers/homeController.php');
 
@@ -24,7 +25,7 @@ $router->get('/logout',fn()=>require 'controllers/logoutController.php');
 
 $router->put("/todos/{id}/update",fn($todoId)=>require 'controllers/updateTodosController.php');
 
-$router->get('/todos/{id}/update',fn($todoId)=> require 'controllers/editTodosController.php');
+$router->get('/todos/{id}/update',fn($todoId)=>require 'controllers/editTodoController.php');
 
 
 $router->get('/todos',fn()=>require 'controllers/getTodosController.php');
@@ -36,3 +37,28 @@ $router->post('/todos',fn()=> require 'controllers/storeTodosController.php');
 $router->get('/todos/{id}/delete', fn($todoId)=>require 'controllers/deleteTodosController.php');
 
 $router->post('/todos/{id}/delete', fn($todoId)=>require 'controllers/deleteTodosController.php');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
