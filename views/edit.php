@@ -1,12 +1,11 @@
-
 <?php
 require 'views/components/header.php';
-?>
+require 'views/components/navbar.php';
 ?>
 <div class="edit-container">
     <h2 class="edit-header">Edit Task</h2>
     <form method="POST" action="/todos/<?= /** @var TYPE_NAME $todo */
-    $todo['id'] ?>/update" >
+    $todo['id'] ?>/update">
         <input hidden="" type="text" name="_method" value="PUT" id="">
         <div class="form-group">
             <label for="taskName" class="form-label">Task Name</label>
@@ -15,9 +14,9 @@ require 'views/components/header.php';
         <div class="form-group">
             <label for="taskStatus" class="form-label">Status</label>
             <select id="taskStatus" class="form-select" name="status">
-                <option value="pending" <?= $todo['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
-                <option value="Completed" <?= $todo['status'] == 'Completed' ? 'selected' : '' ?>>Completed</option>
-                <option value="in_progress" <?= $todo['status'] == 'in_progress' ? 'selected' : '' ?>>In Progress</option>
+                <option value="Completed" <?= $todo['status'] == 'completed' ? 'selected' : ''?>>Completed</option>
+                <option value="Pending" <?= $todo['status'] == 'pending' ? 'selected' : ''?>>Pending</option>
+                <option value="in_progress" <?= $todo['status'] == 'in_progress' ? 'selected' : ''?>>In-progress</option>
             </select>
         </div>
         <div class="form-group">
@@ -29,7 +28,6 @@ require 'views/components/header.php';
             <a href="/todos" class="btn btn-secondary">Back to Todo list</a>
         </div>
     </form>
-
 </div>
 <?php
 require 'views/components/footer.php';

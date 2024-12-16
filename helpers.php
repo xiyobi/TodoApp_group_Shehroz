@@ -1,9 +1,12 @@
 <?php
-function view($page, $data = [])
+
+
+function view (string $page, array $data = []): void
 {
     extract($data);
-    require 'views/'.$page. '.php';
+    require 'views/' . $page . '.php';
 }
-function redirect(string $url){
+
+function redirect($url){
     header("Location: $url");
 }

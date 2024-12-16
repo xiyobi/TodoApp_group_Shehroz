@@ -8,50 +8,80 @@ class Router
 
     }
 
-    public function getResourser(){
-        if (isset(explode("/",$this->currentRounte)[2])){
-            $resourceId=(int)explode("/",$this->currentRounte)[2];
-            return $resourceId ? $resourceId : false;
+    public function getResourser($route){
+        $resourceIndex = mb_stripos($route, '{id}');
+        if (!$resourceIndex) {
+            return false;
         }
-        return false;
+        $resourceValue =substr($this->currentRounte,$resourceIndex);
+        if ($limit = mb_stripos($resourceValue, '/')) {
+            return substr($resourceValue, 0, $limit);
+        }
+        return $resourceValue ? $resourceValue : false;
+
     }
 
     public function get($route,$callback){
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $resourceId=$this->getResourser();
-            $route = str_replace('{id}',$resourceId, $route);
-            if ($route == $this->currentRounte) {
-                $callback($resourceId);
-                exit();
-            }
-        }
-    }
+            $resourceValue = $this->getResourser($route);
 
-    public function post($route,$callback){
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $resourceId=$this->getResourser();
-            $route = str_replace('{id}',$resourceId, $route);
-            if ($route == $this->currentRounte) {
-                $callback($resourceId);
-                exit();
-            }
-        }
-    }
-
-
-    public function put($route, $callback)
-    {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if ($_POST['_method'] == 'PUT') {
-                $resourceId=$this->getResourser();
-                $route = str_replace('{id}',$resourceId, $route);
-                if ($route == $this->currentRounte) {
-                    $callback($resourceId);
+            if ($resourceValue) {
+                $resourceRoute = str_replace('{id}', $resourceValue, $route);
+                if ($resourceRoute == $this->currentRounte) {
+                    $callback($resourceValue);
                     exit();
                 }
             }
+            if ($route == $this->currentRounte) {
+                $callback();
+                exit();
+            }
         }
 
+    }
+
+    public function post($route,$callback)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $resourceValue = $this->getResourser($route);
+            if ($resourceValue) {
+                $resourceRoute = str_replace('{id}', $resourceValue, $route);
+                if ($resourceRoute == $this->currentRounte) {
+                    $callback($resourceValue);
+                    exit();
+                }
+            }
+            if ($route == $this->currentRounte) {
+                $callback();
+                exit();
+            }
+        }
+    }
+    public function put($route, $callback)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset($_POST['_method']) && $_POST['_method'] == 'PUT') {
+                $resourceValue = $this->getResourser($route);
+                if ($resourceValue) {
+                    $resourceRoute = str_replace('{id}', $resourceValue, $route);
+                    if ($resourceRoute == $this->currentRounte) {
+                        $callback($resourceValue);
+                        exit();
+                    }
+                }
+                if ($route == $this->currentRounte) {
+                    $callback();
+                    exit();
+                }
+
+            }
+        }
+
+    }
+
+    public function isApiCall(): bool
+    {
+        return mb_stripos($this->currentRounte, '/api') === 0;
     }
 
 }
