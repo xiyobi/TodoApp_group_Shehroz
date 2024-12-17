@@ -2,10 +2,10 @@
 if (!empty($_POST['email']) && !empty($_POST['password'])) {
     $user = (new \App\User())->login($_POST['email'], $_POST['password']);
     if ($user) {
-        $saveemail = $user['email'];
-        $savepasssword = $user['password'];
+        $save_email = $user['email'];
+        $save_password = $user['password'];
 
-        if ($saveemail === $_POST['email'] && $savepasssword === $_POST['password']) {
+        if ($save_email === $_POST['email'] && $save_password === $_POST['password']) {
             unset($_SESSION['error_message']);
             $_SESSION['user_id'] = $user['id'];
             unset($user['password']);

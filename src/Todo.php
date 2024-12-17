@@ -14,7 +14,7 @@ class Todo
 
     }
     public function store (string $title, string $dueDate, int $userId) {
-        $query = "INSERT INTO todos(title, status, due_date, created_at, updated_ad, user_id) VALUES (:title, 'pending', :due_date, NOW(), NOW(), :user_id)";
+        $query = "INSERT INTO todos(title, status, due_date, created_at, updated_at, user_id) VALUES (:title, 'pending', :due_date, NOW(), NOW(), :user_id)";
         $this->pdo->prepare($query)->execute([
         ":title" => $title,
         ":due_date" => $dueDate,
@@ -22,7 +22,7 @@ class Todo
     ]);
 }
     public function update (int $id, string $title, string $status, string $dueDate) {
-        $query = "UPDATE todos set title=:title,status=:status, due_date=:due_date, updated_ad=NOW() where id=:id";
+        $query = "UPDATE todos set title=:title,status=:status, due_date=:due_date, updated_at=NOW() where id=:id";
 
         $stmt = $this->pdo->prepare($query);
         return $stmt->execute([
@@ -68,6 +68,17 @@ public function getTodo (int $id){
         ]);
 
 }
+
+    public function getAllTodosTelegramById(int $chatId): array
+    {
+        $query = " SELECT todos.* FROM todos INNER JOIN users ON users.id = todos.user_id WHERE users.telegram_id = :chatId";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            ":chatId" => $chatId,
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 
 }

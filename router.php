@@ -9,4 +9,8 @@ if($router->isApiCall()){
     exit();
 }
 
+if($router->isTelegramm()){
+    require 'routes/telegram.php';
+}
+
 require 'routes/web.php';

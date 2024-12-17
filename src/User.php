@@ -68,7 +68,6 @@ class User
 
     public function DeleteAccount(int $userId): mixed
     {
-//        dd($userId);
         $query = "DELETE FROM users WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([
@@ -76,5 +75,16 @@ class User
         ]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function linkTelegramId(int $userId, int $chatId): void
+    {
+        $query = "UPDATE users SET telegram_id = :chatId WHERE id = :userId";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            ":chatId" => $chatId,
+            ":userId" => $userId,
+        ]);
+    }
+
 }
 
