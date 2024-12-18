@@ -7,7 +7,7 @@ use PDO;
 
 class User
 {
-    public $pdo;
+    public PDO $pdo;
 
     public function __construct()
     {
@@ -68,7 +68,6 @@ class User
 
     public function DeleteAccount(int $userId): mixed
     {
-//        dd($userId);
         $query = "DELETE FROM users WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([
@@ -76,5 +75,18 @@ class User
         ]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function setTelegramId(int $userId, int $chat_id): void
+    {
+        $query = "UPDATE users SET telegram_id = :chat_id WHERE id = :userId";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            ':chat_id' => $chat_id,
+            ':userId' => $userId,
+        ]);
+    }
+
 }
 
+$user = new User();
+$user->setTelegramId(7, 12345678);

@@ -2,12 +2,14 @@
 
 use JetBrains\PhpStorm\NoReturn;
 
-function view($page, $data = [])
+function view($page, $data = []): void
 {
     extract($data);
     require 'views/'.$page. '.php';
 }
-function redirect(string $url){
+#[NoReturn] function
+redirect(string $url): void
+{
     header("Location: $url");
     exit();
 }

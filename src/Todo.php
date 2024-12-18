@@ -59,7 +59,7 @@ public function getTodo (int $id){
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-    public function DeleteUserId(int $userId)
+    public function DeleteUserId(int $userId): bool
     {
         $query = "DELETE FROM todos WHERE user_id = :id";
         $stmt = $this->pdo->prepare($query);
@@ -68,6 +68,15 @@ public function getTodo (int $id){
         ]);
 
 }
+    public function getAllTodosTelegramById(int $chat_id): array
+    {
+        $query = " SELECT todos.* FROM todos INNER JOIN users ON users.id = todos.user_id WHERE users.telegram_id = :chat_id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            ":chat_id" => $chat_id,
+        ]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
 
 }

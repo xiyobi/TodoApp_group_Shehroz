@@ -1,7 +1,4 @@
-<?php
-require 'views/components/header.php';
-?>
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="position: fixed; top: 0; width: 100%; z-index:1000;">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="/">Todo App</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -10,7 +7,7 @@ require 'views/components/header.php';
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <?php
-                if (isset($_SESSION['user'])):
+                if (isset($_SESSION['user'])) :
                     ?>
                     <li class="dropdown">
                         <a href="/todos" data-bs-toggle="dropdown" aria-expanded="false">
@@ -22,9 +19,10 @@ require 'views/components/header.php';
                             </svg>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/todos"><?= $_SESSION['user']['full_name'] ?? '' ?></a></li>
                             <li><a class="dropdown-item" href="/todos">To-do List</a></li>
-                            <li><a class="dropdown-item"  href="/logout" >log out</a></li>
+                            <li><a class="dropdown-item" href="/todos"><?= $_SESSION['user']['full_name'] ?? '' ?></a></li>
+                            <li><a class="dropdown-item text-item" href="https://t.me/nt3_todos_appbot?start=<?= $_SESSION['user']['id']?>" target="_blank">Go to Telegram</a></li>
+                            <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
                             <li><a class="dropdown-item"  href="/DeleteAccount" >Delete Account</a></li>
                         </ul>
                     </li>

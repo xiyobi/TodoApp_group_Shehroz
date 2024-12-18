@@ -1,6 +1,13 @@
 {
     "require": {
-        "guzzlehttp/guzzle": "^7.0",
+        "vlucas/phpdotenv": "^5.6",
+        "ext-pdo": "*",
+        "guzzlehttp/guzzle": "^7.9",
         "larapack/dd": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
     }
 }
