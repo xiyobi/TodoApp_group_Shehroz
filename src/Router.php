@@ -105,8 +105,8 @@ class Router
     {
         return mb_stripos($this->currentRounte, '/api') === 0;
 }
-public function isTelegram()
-    {
+public function isTelegram(): bool
+{
         return mb_stripos($this->currentRounte, '/telegram') === 0;
 }
 
