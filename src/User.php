@@ -53,7 +53,7 @@ class User
         if ($stmt->rowCount() > 0) {
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
-            return false;
+        return false;
     }
 
     public function getUserById(int $id): mixed
@@ -76,15 +76,16 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function linkTelegramId(int $userId, int $chatId): void
+    public function linkTelegramId(int $id, int $telegramId): void
     {
-        $query = "UPDATE users SET telegram_id = :chatId WHERE id = :userId";
+        $query = "UPDATE users SET telegram_id = :telegram_id WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([
-            ":chatId" => $chatId,
-            ":userId" => $userId,
+            ":id" => $id,
+            ":telegram_id" => $telegramId,
         ]);
     }
+
 
 }
 
