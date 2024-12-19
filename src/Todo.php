@@ -13,7 +13,8 @@ class Todo
         $this->pdo = $db->conn;
 
     }
-    public function store (string $title, string $dueDate, int $userId) {
+    public function store (string $title, string $dueDate, int $userId): void
+    {
         $query = "INSERT INTO todos(title, status, due_date, created_at, updated_ad, user_id) VALUES (:title, 'pending', :due_date, NOW(), NOW(), :user_id)";
         $this->pdo->prepare($query)->execute([
         ":title" => $title,
@@ -21,7 +22,8 @@ class Todo
         ":user_id" => $userId
     ]);
 }
-    public function update (int $id, string $title, string $status, string $dueDate) {
+    public function update (int $id, string $title, string $status, string $dueDate): bool
+    {
         $query = "UPDATE todos set title=:title,status=:status, due_date=:due_date, updated_ad=NOW() where id=:id";
 
         $stmt = $this->pdo->prepare($query);
@@ -34,7 +36,8 @@ class Todo
     }
 
 
-public function getAllTodos (int $userId) {
+public function getAllTodos (int $userId): array
+{
         $query="SELECT * from todos WHERE user_id = :user_id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([
@@ -43,8 +46,8 @@ public function getAllTodos (int $userId) {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 }
-
-public function destory (int $id){
+public function destory (int $id): bool
+{
     $query = "Delete from todos where id = :id";
     return $this->pdo->prepare($query)->execute([
         ":id" => $id
@@ -68,14 +71,14 @@ public function getTodo (int $id){
         ]);
 
 }
-    public function getAllTodosTelegramById(int $chat_id): array
+    public function getAllTodosTelegramById(int $telegram_id): array
     {
-        $query = " SELECT todos.* FROM todos INNER JOIN users ON users.id = todos.user_id WHERE users.telegram_id = :chat_id";
+        $query = " SELECT todos FROM todos INNER JOIN todo_app.users users ON todos.user_id = users.id WHERE users.telegram_id = :telegram_id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([
-            ":chat_id" => $chat_id,
+            ":telegram_id" => $telegram_id,
         ]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 

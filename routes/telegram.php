@@ -8,13 +8,21 @@ $todo = new Todo();
 $bot = new Bot();
 $user = new User();
 
+
 $update = json_decode(file_get_contents('php://input'));
+
 $chat_id = $update->message->chat->id;
 $text = $update->message->text;
 
-
+$callbackQuery = $update->callback_query;
+$callbackQueryId = $callbackQuery->id;
+$callbackData = $callbackQuery->data;
+$callbackUserId = $callbackQuery->from->id;
+$callbackChatId = $callbackQuery->message->chat->id;
+$callbackMessageId = $callbackQuery->message->message_id;
 
 if ($text == '/start'){
+
     $bot->makeRequest('sendMessage',[
         'chat_id'=>$chat_id,
         'text'=>'Assalomu alykum bot hush kelibsiz'
@@ -24,31 +32,16 @@ if ($text == '/start'){
 
 if (mb_stripos($text, '/start')!==false){
     $userId = explode('/start', $text)[1];
-    $user ->setTelegramId($userId,$chat_id);
+    $user ->setTelegramId($userId, $chat_id);
     $bot->makeRequest('sendMessage',[
         'chat_id'=>$chat_id,
-        'text'=>'Assalomu alykum'
+        'text'=>'Assalomu alykum'.$userId
     ]);
     exit();
 }
-if ($text ='/tasks')
+
+if ($text =='/tasks')
 {
-    $tasks = $todo->getAllTodosTelegramById($chat_id);
-    if (!empty($tasks)){
-        $responseText = "sizing ishiningiz";
-        foreach ($tasks as $index => $task){
-            $responseText .= ($index + 1) . ". " . $task['title'] . " - " . $task['status'] . " (Date: " . $task['due_date'] . ")\n";
-
-        }
-    }else{
-        $responseText = "no found page";
-    }
-
-}
-if ($text == '/help'){
-    $bot->makeRequest('sendMessage',[
-        'chat_id'=>$chat_id,
-        'text'=>'Qanady Yordam kerak'
-    ]);
+    $bot->sentUserTasks($chat_id);
     exit();
 }
