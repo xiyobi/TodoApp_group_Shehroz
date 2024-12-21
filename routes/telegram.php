@@ -19,6 +19,8 @@ $callbackUserId = $callbackQuery->from->id;
 $callbackChatId = $callbackQuery->message->chat->id;
 $callbackMessageId = $callbackQuery->message->message_id;
 
+$redis = new Redis();
+
 $user = new User();
 
 $bot = new Bot();
@@ -38,11 +40,25 @@ if($callbackQuery){
                         ['callback_data'=>'completed_' . $todo['id'], 'text'=>'Complete'],
                         ['callback_data'=>'in_progress_' . $todo['id'], 'text'=>'In progress'],
                         ['callback_data'=>'pending_' . $todo['id'], 'text'=>'Pending'],
+                    ],
+                    [
+                        ['callback_data'=>'edit_' . $todo['id'], 'text'=>'Edit']
                     ]
+
 
                 ]
 
             ])
+        ]);
+    }
+    if(mb_stripos($callbackData,'edit_') !== false){
+        $taskId = explode('edit_', $callbackData)[1];
+
+        $redis->set('edit_' . $callbackChatId, $taskId);
+        $bot->makeRequest('editMessageText',[
+            'chat_id'=>$callbackChatId,
+            'message_id'=>$callbackMessageId,
+            'text'=>'Enter new task:' . $redis->get('edit_' . $callbackChatId),
         ]);
     }
     if(mb_stripos($callbackData,'completed_') !== false){
@@ -80,9 +96,28 @@ if($message){
         exit();
     }
 
-    if ($text == '/task') {
+    if ($text == '/tacks') {
         $bot->sendUserText($chatId);
         exit();
 
     }
+    if ($text) {
+        $taskId = $redis->get('edit_' . $chatId);
+        if($taskId){
+            (new Todo())->updateTitle($taskId, $text);
+            $bot->makeRequest('sendMessage',[
+                'chat_id'=>$chatId,
+                'text'=>'Task updated'
+            ]);
+
+        }
+        $redis->del('edit_' . $chatId);
+    }
 }
+
+
+
+
+
+
+
