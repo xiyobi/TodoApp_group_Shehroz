@@ -8,7 +8,8 @@ class Router
 
     }
 
-    public function getResourser($route){
+    public function getResourser($route): false|string
+    {
         $resourceIndex = mb_stripos($route, '{id}');
         if (!$resourceIndex) {
             return false;
@@ -24,7 +25,6 @@ class Router
     public function get($route,$callback){
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $resourceValue = $this->getResourser($route);
-
             if ($resourceValue) {
                 $resourceRoute = str_replace('{id}', $resourceValue, $route);
                 if ($resourceRoute == $this->currentRounte) {
@@ -104,10 +104,11 @@ class Router
     public function isApiCall(): bool
     {
         return mb_stripos($this->currentRounte, '/api') === 0;
-}
-public function isTelegram(): bool
-{
+    }
+
+    public function isTelegram(): bool
+    {
         return mb_stripos($this->currentRounte, '/telegram') === 0;
-}
+    }
 
 }

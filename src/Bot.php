@@ -16,55 +16,61 @@ class Bot
     }
 
 
-    public function makeRequest(string $method, array $params){
+    public function makeRequest(string $method, array $params): void
+    {
         $this->client->post($method, ['json' => $params]);
     }
-    public function getUserTasks(int $chatId): array{
+
+    public function getUserTasks(int $chatId): array
+    {
         $todo = new Todo();
-
-        return $todo->getTodoByTelegramId($chatId);
+        return $todo->getAllTodosByTelegramId($chatId);
     }
 
-    public function prepareTaskList (int $chatId): string{
-        $i = 0;
+    public function prepareTaskList(int $chatId): string
+    {
         $tasks = $this->getUserTasks($chatId);
-        $tasksList = "Your tasks:\n\n";
-        foreach ($tasks as $task) {
-            $i++;
-            $taskList .= "Task #" .$i. "\n";
-            $taskList .= $task['title']."\n";
-            $taskList .= $task['due_date']."\n";
-            $taskList .= $task['status']."\n\n";
-            $taskList .= "====================\n\n";
+        $i = 0;
+        if (!empty($tasks)) {
+            $responseText = "Sizning vazifalaringiz:\n\n";
+            foreach ($tasks as $index => $task) {
+                $i++;
+                $responseText .= "Task #:" . $i . "\n";
+                $responseText .= 'Vazifa ' . ($index + 1) . ': ' . $task['title'] . "\n";
+                $responseText .= 'Status: ' . $task['status'] . "\n";
+                $responseText .= 'Kiritilgan sana: ' . $task['due_date'] . "\n\n";
+                $responseText .= '---------------------------------------' . "\n\n";
+            }
+        } else {
+            $responseText = "Hozircha hech qanday vazifa yo'q.";
         }
-        return $taskList;
+        return $responseText;
     }
 
-    public function prepareButtons (int $chatId): array{
-        $i = 0;
+    public function prepareButtons(int $chatId): array
+    {
         $tasks = $this->getUserTasks($chatId);
+        $i = 0;
         $buttons = [];
         foreach ($tasks as $task) {
             $i++;
-            $buttons[]= [
-                'text'=>$i,
-                'callback_date'=>$task['task_id']
+            $buttons[] = [
+                'text' => $i,
+                'callback_data' => 'task_' . $task['task_id']
             ];
         }
-        return array_chunk($buttons,2);
+        return array_chunk($buttons, 2);
     }
 
-    public function sendUserTasks(int $chatId): void{
-        $taskList = $this->prepareTaskList($chatId);
-        $this->makeRequest("sendMessage",[
-            "chat_id" => $chatId,
-            "text" => $taskList,
-            "reply_markup" => json_encode([
-                "inline_keyboard" => $this->prepareButtons($chatId),
+    public function sendUserText(int $chatId): void
+    {
+        $responseText = $this->prepareTaskList($chatId);
+        $this->makeRequest('sendMessage', [
+            'chat_id' => $chatId,
+            'text' => $responseText,
+            'reply_markup' => json_encode([
+                'inline_keyboard'=>$this->prepareButtons($chatId),
             ])
         ]);
-
     }
-
-
 }

@@ -80,7 +80,7 @@ if($message){
         exit();
     }
 
-    if ($text == '/tacks') {
+    if ($text == '/task') {
         $bot->sendUserText($chatId);
         exit();
 
